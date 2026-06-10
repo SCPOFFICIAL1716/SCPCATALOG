@@ -1,0 +1,2126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SCP Catalog</title>
+    <style>
+      :root {
+        --bg: #020604;
+        --panel: #061109;
+        --panel-2: #0b1a10;
+        --panel-3: #102417;
+        --text: #eafff1;
+        --muted: #7ca98d;
+        --soft: #b7f5ca;
+        --line: rgba(74, 255, 143, 0.18);
+        --accent: #2dff88;
+        --accent-2: #8cffbf;
+        --gold: #d6ff71;
+        --green: #2dff88;
+        --blue: #5dffc1;
+        --danger: #ff4d5d;
+        --shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
+        color-scheme: dark;
+        font-family: "Share Tech Mono", "OCR A Std", "Courier New", ui-monospace, monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background:
+          radial-gradient(circle at top left, rgba(45, 255, 136, 0.18), transparent 34rem),
+          radial-gradient(circle at bottom right, rgba(45, 255, 136, 0.08), transparent 36rem),
+          linear-gradient(135deg, #050609, var(--bg) 45%, #090d14);
+        color: var(--text);
+      }
+
+      body::before {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        content: "";
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        background-size: 42px 42px;
+        mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 85%);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .site-shell {
+        width: min(1220px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 48px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 28px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 230px;
+      }
+
+      .brand img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        filter: drop-shadow(0 8px 18px rgba(45, 255, 136, 0.28));
+      }
+
+      .brand-title {
+        margin: 0;
+        font-size: clamp(1.1rem, 2vw, 1.6rem);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .brand-subtitle {
+        margin: 3px 0 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .nav-links a,
+      .pill,
+      .tab-button,
+      .button {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.045);
+        color: var(--soft);
+        transition: 160ms ease;
+      }
+
+      .nav-links a {
+        padding: 10px 14px;
+        font-size: 0.92rem;
+      }
+
+      .nav-links a:hover,
+      .nav-links a.active,
+      .tab-button.active,
+      .button:hover {
+        border-color: rgba(45, 255, 136, 0.72);
+        background: rgba(45, 255, 136, 0.14);
+        color: var(--text);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+        gap: 24px;
+        align-items: stretch;
+        margin-bottom: 24px;
+      }
+
+      .hero-card,
+      .panel,
+      .scp-card,
+      .auth-card,
+      .notice,
+      .mini-card {
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: linear-gradient(145deg, rgba(22, 27, 39, 0.94), rgba(10, 13, 20, 0.96));
+        box-shadow: var(--shadow);
+      }
+
+      .hero-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 360px;
+        padding: clamp(28px, 5vw, 56px);
+      }
+
+      .hero-card::after {
+        position: absolute;
+        right: -110px;
+        bottom: -130px;
+        width: 360px;
+        height: 360px;
+        content: "";
+        background: url("SCP assets/Scp foundation logo white.png") center / contain no-repeat;
+        opacity: 0.055;
+        transform: rotate(-10deg);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        color: var(--accent-2);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 24px var(--accent);
+        content: "";
+      }
+
+      .hero h1 {
+        max-width: 760px;
+        margin: 0;
+        font-size: clamp(2.2rem, 7vw, 5.8rem);
+        line-height: 0.92;
+        letter-spacing: -0.07em;
+      }
+
+      .hero-copy {
+        max-width: 680px;
+        margin: 22px 0 0;
+        color: var(--soft);
+        font-size: clamp(1rem, 1.8vw, 1.2rem);
+        line-height: 1.7;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 11px 17px;
+      }
+
+      .button.primary {
+        border-color: rgba(45, 255, 136, 0.85);
+        background: linear-gradient(135deg, #24d66f, #075a32);
+        color: white;
+      }
+
+      .button.ghost {
+        background: transparent;
+      }
+
+      .button.danger {
+        border-color: rgba(255, 77, 93, 0.7);
+        background: rgba(255, 77, 93, 0.14);
+        color: #ffd6da;
+      }
+
+      .button.success {
+        border-color: rgba(83, 209, 140, 0.65);
+        background: rgba(83, 209, 140, 0.14);
+        color: #d8ffe8;
+      }
+
+      .button.small {
+        min-height: 36px;
+        padding: 8px 12px;
+        font-size: 0.86rem;
+      }
+
+      .auth-card {
+        padding: 24px;
+      }
+
+      .auth-card h2,
+      .panel h2,
+      .panel h3 {
+        margin: 0 0 12px;
+      }
+
+      .auth-card p,
+      .panel p,
+      .empty-state {
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .form-grid.one {
+        grid-template-columns: 1fr;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      .field label {
+        color: var(--soft);
+        font-size: 0.86rem;
+        font-weight: 700;
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        outline: none;
+        background: rgba(5, 7, 11, 0.74);
+        color: var(--text);
+        padding: 12px 13px;
+      }
+
+      .field textarea {
+        min-height: 150px;
+        resize: vertical;
+      }
+
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        border-color: rgba(45, 255, 136, 0.82);
+        box-shadow: 0 0 0 4px rgba(45, 255, 136, 0.12);
+      }
+
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .tab-button {
+        padding: 10px 14px;
+      }
+
+      .tab-panel {
+        display: none;
+      }
+
+      .tab-panel.active {
+        display: block;
+      }
+
+      .panel {
+        padding: clamp(18px, 3vw, 28px);
+        margin-bottom: 20px;
+      }
+
+      .toolbar {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(150px, 210px));
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .catalog-grid,
+      .submission-grid,
+      .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 18px;
+      }
+
+      .scp-card {
+        position: relative;
+        overflow: hidden;
+        padding: 18px;
+      }
+
+      .scp-card::before {
+        position: absolute;
+        inset: 0 0 auto;
+        height: 4px;
+        content: "";
+        background: linear-gradient(90deg, var(--accent), transparent);
+      }
+
+      .scp-card-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+
+      .scp-number {
+        color: var(--accent-2);
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+      }
+
+      .scp-card h3 {
+        margin: 5px 0 0;
+        font-size: 1.22rem;
+      }
+
+      .class-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        flex: 0 0 auto;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 7px 9px;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--soft);
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .class-badge img,
+      .class-preview img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+
+      .scp-image {
+        width: 100%;
+        height: 170px;
+        margin: 10px 0 14px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        object-fit: cover;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .scp-card p {
+        color: var(--soft);
+        line-height: 1.62;
+      }
+
+      .card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 14px 0;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 6px 10px;
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+
+      .card-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 14px;
+      }
+
+      .class-preview {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 14px;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .class-preview img {
+        width: 56px;
+        height: 56px;
+      }
+
+      .class-preview h3 {
+        margin: 0 0 4px;
+      }
+
+      .class-preview p {
+        margin: 0;
+      }
+
+      .notice {
+        padding: 16px 18px;
+        margin-bottom: 18px;
+        color: var(--soft);
+      }
+
+      .notice strong {
+        color: var(--text);
+      }
+
+      .split-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 0.72fr) minmax(300px, 0.28fr);
+        gap: 18px;
+      }
+
+      .mini-card {
+        padding: 15px;
+      }
+
+      .mini-card h4 {
+        margin: 0 0 8px;
+      }
+
+      .mini-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .toast {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 20;
+        max-width: min(420px, calc(100vw - 36px));
+        border: 1px solid rgba(45, 255, 136, 0.55);
+        border-radius: 18px;
+        background: rgba(11, 14, 22, 0.96);
+        box-shadow: var(--shadow);
+        color: var(--text);
+        padding: 14px 16px;
+        transform: translateY(18px);
+        opacity: 0;
+        transition: 180ms ease;
+      }
+
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .portal-frame {
+        min-height: 55vh;
+      }
+
+      .portal-hero {
+        text-align: center;
+      }
+
+      .portal-hero h1 {
+        margin: 0;
+        font-size: clamp(2.4rem, 8vw, 6rem);
+        letter-spacing: -0.07em;
+      }
+
+      .portal-hero p {
+        max-width: 760px;
+        margin: 18px auto 0;
+        color: var(--soft);
+        line-height: 1.75;
+      }
+
+      .database-html {
+        animation: fade-in 220ms ease both;
+      }
+
+      @keyframes fade-in {
+        from {
+          transform: translateY(8px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 880px) {
+        .topbar,
+        .hero,
+        .split-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .nav-links {
+          justify-content: flex-start;
+        }
+
+        .toolbar,
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      body {
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.015em;
+      }
+
+      body::after {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        content: "";
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(45, 255, 136, 0.035),
+          rgba(45, 255, 136, 0.035) 1px,
+          transparent 1px,
+          transparent 6px
+        );
+        opacity: 0.24;
+      }
+
+      .site-shell {
+        padding-top: 0;
+      }
+
+      .catalog-bar {
+        position: sticky;
+        top: 0;
+        z-index: 15;
+        width: 100%;
+        margin-bottom: 20px;
+        border: 1px solid rgba(45, 255, 136, 0.24);
+        border-top: 0;
+        border-radius: 0 0 24px 24px;
+        background: rgba(2, 8, 5, 0.92);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42), 0 0 36px rgba(45, 255, 136, 0.08);
+        backdrop-filter: blur(16px);
+        padding: 12px 16px;
+      }
+
+      .catalog-bar .brand-title,
+      .robot-title,
+      .panel h2,
+      .tab-button,
+      .button,
+      .field label {
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .catalog-bar .brand {
+        min-width: auto;
+      }
+
+      .catalog-bar .brand img {
+        width: 38px;
+        height: 38px;
+      }
+
+      .catalog-top-search {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) minmax(130px, 180px) minmax(130px, 180px);
+        gap: 10px;
+        flex: 1;
+        max-width: 740px;
+      }
+
+      .catalog-top-search input,
+      .catalog-top-search select {
+        width: 100%;
+        border: 1px solid rgba(45, 255, 136, 0.26);
+        border-radius: 999px;
+        outline: none;
+        background: rgba(0, 0, 0, 0.56);
+        color: var(--text);
+        box-shadow: inset 0 0 20px rgba(45, 255, 136, 0.035);
+        padding: 11px 14px;
+      }
+
+      .catalog-top-search input:focus,
+      .catalog-top-search select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(45, 255, 136, 0.11), inset 0 0 20px rgba(45, 255, 136, 0.06);
+      }
+
+      .top-auth {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-width: 140px;
+      }
+
+      .user-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(45, 255, 136, 0.3);
+        border-radius: 999px;
+        background: rgba(45, 255, 136, 0.08);
+        color: var(--soft);
+        padding: 6px 8px 6px 12px;
+      }
+
+      .auth-popover {
+        position: sticky;
+        top: 76px;
+        z-index: 14;
+        width: min(520px, 100%);
+        margin: 0 0 18px auto;
+        border: 1px solid rgba(45, 255, 136, 0.26);
+        border-radius: 22px;
+        background: rgba(4, 14, 8, 0.96);
+        box-shadow: var(--shadow);
+        padding: 18px;
+      }
+
+      .auth-popover h2 {
+        margin: 0 0 8px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .auth-popover p {
+        margin: 0 0 14px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .catalog-intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 18px;
+        align-items: end;
+      }
+
+      .catalog-intro h2 {
+        margin: 0;
+        font-size: clamp(2rem, 6vw, 4.8rem);
+        line-height: 0.95;
+        text-shadow: 0 0 26px rgba(45, 255, 136, 0.24);
+      }
+
+      .catalog-intro p {
+        max-width: 760px;
+        margin: 12px 0 0;
+      }
+
+      .catalog-status {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .catalog-panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+
+      .auth-only-note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .entry-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 16px 0;
+      }
+
+      .entry-tab {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.035);
+        color: var(--soft);
+        padding: 10px 14px;
+      }
+
+      .entry-tab.active {
+        border-color: rgba(45, 255, 136, 0.7);
+        background: rgba(45, 255, 136, 0.14);
+        color: var(--text);
+      }
+
+      .entry-panel {
+        display: none;
+      }
+
+      .entry-panel.active {
+        display: block;
+      }
+
+      @media (max-width: 980px) {
+        .catalog-bar {
+          align-items: stretch;
+        }
+
+        .catalog-top-search {
+          width: 100%;
+          max-width: none;
+          grid-template-columns: 1fr;
+        }
+
+        .top-auth {
+          justify-content: flex-start;
+        }
+
+        .catalog-intro {
+          grid-template-columns: 1fr;
+        }
+
+        .catalog-status {
+          justify-content: flex-start;
+        }
+      }
+
+      .auth-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 40;
+        display: grid;
+        place-items: center;
+        background: rgba(0, 5, 2, 0.72);
+        backdrop-filter: blur(10px);
+        padding: 18px;
+      }
+
+      .auth-overlay.hidden {
+        display: none !important;
+      }
+
+      .auth-modal {
+        width: min(560px, 100%);
+        border: 1px solid rgba(45, 255, 136, 0.35);
+        border-radius: 28px;
+        background: linear-gradient(145deg, rgba(5, 20, 10, 0.98), rgba(0, 5, 2, 0.98));
+        box-shadow: 0 30px 100px rgba(0, 0, 0, 0.65), 0 0 46px rgba(45, 255, 136, 0.12);
+        padding: clamp(20px, 4vw, 30px);
+      }
+
+      .auth-modal-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .auth-modal h2 {
+        margin: 0 0 8px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .auth-modal p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .auth-mode {
+        display: none;
+      }
+
+      .auth-mode.active {
+        display: block;
+      }
+
+      .auth-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .auth-issue {
+        border: 1px solid rgba(255, 77, 93, 0.45);
+        border-radius: 18px;
+        background: rgba(255, 77, 93, 0.09);
+        margin-top: 14px;
+        padding: 14px;
+      }
+
+      .top-user-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .tabs.catalog-secondary-tabs {
+        display: none;
+      }
+
+      .class-logo-picker {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(76px, 1fr));
+        gap: 10px;
+      }
+
+      .class-logo-option {
+        display: grid;
+        place-items: center;
+        min-height: 74px;
+        border: 1px solid rgba(45, 255, 136, 0.18);
+        border-radius: 18px;
+        background: transparent;
+        color: var(--muted);
+        padding: 8px;
+      }
+
+      .class-logo-frame {
+        display: grid;
+        place-items: center;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: transparent;
+        overflow: hidden;
+      }
+
+      .class-logo-option img {
+        display: block;
+        width: 46px;
+        height: 46px;
+        object-fit: contain;
+        object-position: center;
+        border-radius: 50%;
+        background: transparent;
+      }
+
+
+      .class-logo-option.active {
+        border-color: var(--accent);
+        background: rgba(45, 255, 136, 0.09);
+        color: var(--text);
+        box-shadow: 0 0 22px rgba(45, 255, 136, 0.12);
+      }
+
+      .sub-scp-builder,
+      .sub-scp-list,
+      .sub-scp-catalog {
+        display: grid;
+        gap: 14px;
+      }
+
+      .sub-scp-card {
+        border: 1px solid rgba(45, 255, 136, 0.18);
+        border-radius: 22px;
+        background: rgba(0, 0, 0, 0.24);
+        padding: 16px;
+      }
+
+      .sub-scp-card h3,
+      .sub-scp-card h4 {
+        margin: 0 0 12px;
+      }
+
+      .file-hint,
+      .field-hint,
+      .status-message {
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.45;
+      }
+
+      .status-message.closed {
+        color: #ff9aa5;
+      }
+
+      .status-message.open {
+        color: var(--accent-2);
+      }
+
+      .scp-subentries {
+        margin-top: 14px;
+      }
+
+      .scp-subentries summary {
+        color: var(--accent-2);
+        cursor: pointer;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .top-auth {
+        gap: 10px;
+      }
+
+      @media (max-width: 980px) {
+        .top-user-actions {
+          justify-content: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body data-page="portal">
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="index.html">
+          <img src="SCP assets/Scp foundation logo white.png" alt="SCP Foundation">
+          <div>
+            <h1 class="brand-title">Catalog</h1>
+            <p class="brand-subtitle">Robotic archive interface</p>
+          </div>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a class="active" href="portal.html">Catalog</a>
+          <a href="submissions.html">Submission Viewer</a>
+        </nav>
+      </header>
+
+      <main>
+        <div id="portalMount" class="portal-frame"></div>
+      </main>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script>
+      const API_BASE = "https://morning-boat-680a.soninlaw1716.workers.dev";
+
+      const DB_CONFIG = {
+        catalog: "catalog",
+        submissions: "submissions",
+        accounts: "accounts",
+      };
+
+      const KEYS = {
+        catalogIndex: "scp:catalog:index",
+        submissionIndex: "scp:submission:index",
+        usersIndex: "scp:accounts:users",
+        portalHtml: "scp:portal:html",
+      };
+
+      const CLASS_INFO = [
+        {
+          name: "Safe",
+          asset: "SCP assets/Safe_class_Logo.png",
+          meaning: "Easily and reliably contained.",
+          reason: "Predictable behavior with simple, stable containment procedures.",
+        },
+        {
+          name: "Euclid",
+          asset: "SCP assets/Euclid_class_logo.png",
+          meaning: "Unpredictable or insufficiently understood.",
+          reason: "Behavior varies, rules are unclear, or containment needs constant monitoring.",
+        },
+        {
+          name: "Keter",
+          asset: "SCP assets/_Keter_class_logo.png",
+          meaning: "Extremely difficult to contain and highly dangerous.",
+          reason: "Actively resists containment, spreads, adapts, or can cause catastrophic effects.",
+        },
+        {
+          name: "Apollyon",
+          asset: "SCP assets/Apollyon_class_logo.png",
+          meaning: "Uncontainable and inevitably world-ending.",
+          reason: "No method exists to stop, slow, or control the anomaly.",
+        },
+        {
+          name: "Archon",
+          asset: "SCP assets/Archon class scp.png",
+          meaning: "Could be contained, but should not be.",
+          reason: "Containment would cause more harm than leaving the anomaly free.",
+        },
+        {
+          name: "Decommissioned",
+          asset: "SCP assets/decommisoned class logo.png",
+          meaning: "Removed from the SCP database.",
+          reason: "Deleted, retired, rewritten, or intentionally removed from canon.",
+        },
+        {
+          name: "Explained",
+          asset: "SCP assets/Explained class logo.png",
+          meaning: "No longer considered anomalous.",
+          reason: "A scientific explanation was found, or the original classification was wrong.",
+        },
+        {
+          name: "Hiemal",
+          asset: "SCP assets/Hiemal class logo.png",
+          meaning: "Two or more anomalies that must remain together.",
+          reason: "They keep each other in balance; separating them causes instability or danger.",
+        },
+        {
+          name: "Thaumiel",
+          asset: "SCP assets/Thaumiel_class_logo.png",
+          meaning: "Used by the Foundation to contain other SCPs.",
+          reason: "The anomaly functions as a tool, weapon, or system that supports containment.",
+        },
+        {
+          name: "Ticonderoga",
+          asset: "SCP assets/Ticonderoga class logo.png",
+          meaning: "Impossible to contain, but does not require containment.",
+          reason: "It poses no threat, or its nature makes containment unnecessary.",
+        },
+      ];
+
+      const HONORIFICS = ["Dr.", "Sr.", "Ms.", "Mrs.", "None"];
+      const SUB_SUFFIXES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+      const stores = {
+        catalog: new RedisStore(DB_CONFIG.catalog),
+        submissions: new RedisStore(DB_CONFIG.submissions),
+        accounts: new RedisStore(DB_CONFIG.accounts),
+      };
+
+      const state = {
+        user: readSession(),
+        catalog: [],
+        submissions: [],
+      };
+
+      function RedisStore(store) {
+        this.store = store;
+        this.apiBase = API_BASE.replace(/\/$/, "");
+      }
+
+      RedisStore.prototype.pipeline = async function pipeline(commands) {
+        if (!commands.length) return [];
+
+        const response = await fetch(`${this.apiBase}/api/redis`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ store: this.store, commands }),
+        });
+
+        const payload = await response.json().catch(() => null);
+        if (!response.ok) {
+          throw new Error(payload?.error || `Worker request failed with ${response.status}`);
+        }
+
+        return Array.isArray(payload) ? payload : [];
+      };
+
+      RedisStore.prototype.command = async function command(...args) {
+        const [result] = await this.pipeline([args]);
+        return result;
+      };
+
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const page = document.body.dataset.page;
+        renderClassOptions();
+        updateAuthViews();
+
+        if (page === "catalog") initCatalogPage();
+        if (page === "portal") initPortalPage();
+        if (page === "submissions") initSubmissionsPage();
+      });
+
+      function classInfo(name) {
+        return CLASS_INFO.find((item) => item.name === name) || CLASS_INFO[0];
+      }
+
+      function classBadge(name) {
+        const info = classInfo(name);
+        return `
+          <span class="class-badge">
+            <img src="${escapeAttr(info.asset)}" alt="${escapeAttr(info.name)} class">
+            ${escapeHTML(info.name)}
+          </span>
+        `;
+      }
+
+      function renderClassOptions() {
+        $$('[data-class-select]').forEach((select) => {
+          select.innerHTML = CLASS_INFO.map((item) => `<option value="${escapeAttr(item.name)}">${escapeHTML(item.name)}</option>`).join('');
+        });
+
+        $$('[data-class-picker-for]').forEach((picker) => renderClassLogoPicker(picker));
+
+        $$('[data-class-preview-for]').forEach((preview) => {
+          const input = $(`#${preview.dataset.classPreviewFor}`);
+          const render = () => {
+            const info = classInfo(input?.value || '');
+            if (!input?.value) {
+              preview.innerHTML = `<p class="empty-state">Pick an object class logo.</p>`;
+              return;
+            }
+            preview.innerHTML = `
+              <img src="${escapeAttr(info.asset)}" alt="${escapeAttr(info.name)} class logo">
+              <div>
+                <h3>${escapeHTML(info.name)} Class</h3>
+                <p><strong>${escapeHTML(info.meaning)}</strong> ${escapeHTML(info.reason)}</p>
+              </div>
+            `;
+          };
+          input?.addEventListener('change', render);
+          render();
+        });
+
+        const classGuide = $('#classGuide');
+        if (classGuide) {
+          classGuide.innerHTML = CLASS_INFO.map((item) => `
+            <article class="mini-card">
+              <div class="class-badge"><img src="${escapeAttr(item.asset)}" alt="">${escapeHTML(item.name)}</div>
+              <p><strong>${escapeHTML(item.meaning)}</strong> ${escapeHTML(item.reason)}</p>
+            </article>
+          `).join('');
+        }
+      }
+
+      function renderClassLogoPicker(picker) {
+        const input = $(`#${picker.dataset.classPickerFor}`);
+        if (!input) return;
+        picker.innerHTML = CLASS_INFO.map((item) => `
+          <button class="class-logo-option ${input.value === item.name ? 'active' : ''}" type="button" data-class-choice="${escapeAttr(item.name)}" title="${escapeAttr(item.name)}" aria-label="${escapeAttr(item.name)}">
+            <span class="class-logo-frame"><img src="${escapeAttr(item.asset)}" alt="${escapeAttr(item.name)}"></span>
+          </button>
+        `).join('');
+
+        picker.querySelectorAll('[data-class-choice]').forEach((button) => {
+          button.addEventListener('click', () => {
+            input.value = button.dataset.classChoice;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            renderClassLogoPicker(picker);
+          });
+        });
+      }
+      function initTabs() {
+        $$('[data-tab-target]').forEach((button) => {
+          button.addEventListener('click', () => {
+            const target = button.dataset.tabTarget;
+            if (button.matches('[data-requires-auth]') && !state.user) {
+              openLoginPanel();
+              toast('Log in to submit entries or view your files.');
+              return;
+            }
+            activateMainTab(target);
+          });
+        });
+
+        const hashTarget = location.hash.replace('#', '');
+        if (hashTarget && (hashTarget === 'catalog' || state.user)) {
+          const matchingButton = $(`.tab-button[data-tab-target="${hashTarget}"]`);
+          matchingButton?.click();
+        }
+      }
+
+      function activateMainTab(target) {
+        $$('.tab-button[data-tab-target]').forEach((item) => item.classList.toggle('active', item.dataset.tabTarget === target));
+        $$('[data-tab-panel]').forEach((panel) => panel.classList.toggle('active', panel.dataset.tabPanel === target));
+        history.replaceState(null, '', `#${target}`);
+        if (target === 'mine') refreshMyWork();
+      }
+
+      function initEntryTabs() {
+        $$('[data-entry-tab-target]').forEach((button) => {
+          button.addEventListener('click', () => {
+            const target = button.dataset.entryTabTarget;
+            $$('[data-entry-tab-target]').forEach((item) => item.classList.toggle('active', item === button));
+            $$('[data-entry-panel]').forEach((panel) => panel.classList.toggle('active', panel.dataset.entryPanel === target));
+          });
+        });
+      }
+
+      function initCatalogPage() {
+        initTabs();
+        initEntryTabs();
+        bindAuth();
+        bindLoginPanel();
+        bindCatalogControls();
+        bindSubmissionEnhancements();
+        bindSubmissionForm();
+        refreshCatalog();
+      }
+
+      function initPortalPage() {
+        refreshPortal();
+      }
+
+      function initSubmissionsPage() {
+        bindAdminActions();
+        refreshAdminData();
+      }
+
+      function bindLoginPanel() {
+        $('#loginToggle')?.addEventListener('click', () => openAuthOverlay('login'));
+        $$('[data-auth-close]').forEach((button) => button.addEventListener('click', closeLoginPanel));
+        $$('[data-auth-mode]').forEach((button) => button.addEventListener('click', () => openAuthOverlay(button.dataset.authMode)));
+        $('#retryLogin')?.addEventListener('click', () => showAuthIssue('', false));
+        $('#createFromIssue')?.addEventListener('click', () => openAuthOverlay('create'));
+        $$('[data-username-input]').forEach((input) => {
+          input.addEventListener('input', () => {
+            input.value = normalizeUsername(input.value);
+          });
+        });
+      }
+
+      function openAuthOverlay(mode = 'login') {
+        const panel = $('#loginPanel');
+        if (!panel) return;
+        panel.classList.remove('hidden');
+        panel.dataset.mode = mode;
+        $$('.auth-mode', panel).forEach((node) => node.classList.toggle('active', node.dataset.mode === mode));
+        showAuthIssue('', false);
+        const firstInput = mode === 'create' ? $('#createUsername') : $('#username');
+        firstInput?.focus();
+      }
+
+      function openLoginPanel() {
+        openAuthOverlay('login');
+      }
+
+      function closeLoginPanel() {
+        const panel = $('#loginPanel');
+        if (!panel) return;
+        panel.classList.add('hidden');
+        showAuthIssue('', false);
+      }
+
+      function showAuthIssue(message, show = true) {
+        const issue = $('#authIssue');
+        const text = $('#authIssueText');
+        if (!issue || !text) return;
+        text.textContent = message;
+        issue.classList.toggle('hidden', !show);
+      }
+
+      function bindAuth() {
+        $('#loginForm')?.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const form = event.currentTarget;
+          const username = normalizeUsername(form.elements.username.value);
+          const password = form.elements.password.value;
+
+          if (!isValidUsername(username) || password.length < 4) {
+            showAuthIssue('Use lowercase letters only, no spaces, max 20 characters. Password must be at least 4 characters.');
+            return;
+          }
+
+          try {
+            const existing = await getJSON(stores.accounts, userKey(username));
+            if (!existing) {
+              showAuthIssue('No account found for that username. Retry the details or create a new account.');
+              return;
+            }
+
+            const passwordHash = await hashPassword(username, password);
+            if (existing.passwordHash !== passwordHash) {
+              showAuthIssue('That password does not match. Retry or edit the details.');
+              return;
+            }
+
+            writeSession(sessionFromAccount(existing));
+            form.reset();
+            closeLoginPanel();
+            updateAuthViews();
+            refreshCatalog();
+            refreshMyWork();
+            toast('Logged in.');
+          } catch (error) {
+            showAuthIssue(`Account error: ${error.message}`);
+          }
+        });
+
+        $('#createAccountForm')?.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const form = event.currentTarget;
+          const title = form.elements.title.value;
+          const username = normalizeUsername(form.elements.username.value);
+          const password = form.elements.password.value;
+
+          if (!title) {
+            toast('Pick a title: Dr., Sr., Ms., Mrs., or None.');
+            return;
+          }
+          if (!isValidUsername(username) || password.length < 4) {
+            toast('Username must be lowercase letters only, no spaces, max 20 characters. Password needs 4+ characters.');
+            return;
+          }
+
+          try {
+            const existing = await getJSON(stores.accounts, userKey(username));
+            if (existing) {
+              toast('That username already exists. Try logging in.');
+              openAuthOverlay('login');
+              $('#username').value = username;
+              return;
+            }
+
+            const account = {
+              username,
+              title,
+              displayName: formatAccountName({ username, title }),
+              passwordHash: await hashPassword(username, password),
+              createdAt: Date.now(),
+            };
+            await stores.accounts.pipeline([
+              ['SET', userKey(username), JSON.stringify(account)],
+              ['SADD', KEYS.usersIndex, username],
+            ]);
+            writeSession(sessionFromAccount(account));
+            form.reset();
+            closeLoginPanel();
+            updateAuthViews();
+            refreshCatalog();
+            refreshMyWork();
+            toast('Account created and logged in.');
+          } catch (error) {
+            toast(`Create account failed: ${error.message}`);
+          }
+        });
+
+        $$('[data-logout]').forEach((button) => {
+          button.addEventListener('click', () => {
+            localStorage.removeItem('scpCatalogUser');
+            state.user = null;
+            updateAuthViews();
+            refreshCatalog();
+            refreshMyWork();
+            toast('Logged out.');
+          });
+        });
+      }
+      function bindCatalogControls() {
+        ['catalogSearch', 'catalogClass', 'catalogSort'].forEach((id) => {
+          $(`#${id}`)?.addEventListener('input', renderCatalog);
+        });
+
+        $('#catalogGrid')?.addEventListener('click', async (event) => {
+          const likeButton = event.target.closest('[data-like]');
+          if (likeButton) {
+            await likeEntry(likeButton.dataset.like);
+          }
+        });
+      }
+
+      function bindSubmissionEnhancements() {
+        const numberInput = $('#scpNumber');
+        numberInput?.addEventListener('input', () => {
+          numberInput.value = numberInput.value.replace(/\D/g, '').slice(0, 7);
+          checkMainNumberAvailability();
+        });
+        numberInput?.addEventListener('blur', checkMainNumberAvailability);
+        $('#addSubScp')?.addEventListener('click', addSubScpForm);
+        $('#subScpList')?.addEventListener('click', (event) => {
+          const removeButton = event.target.closest('[data-remove-sub]');
+          if (removeButton) removeButton.closest('[data-sub-scp-card]')?.remove();
+        });
+      }
+      function bindSubmissionForm() {
+        $('#scpSubmissionForm')?.addEventListener('submit', async (event) => {
+          event.preventDefault();
+
+          if (!state.user) {
+            openLoginPanel();
+            toast('Create an account or log in before submitting.');
+            return;
+          }
+
+          const form = event.currentTarget;
+          const digits = form.elements.number.value.replace(/\D/g, '').slice(0, 7);
+          const number = normalizeScpNumber(digits);
+          if (!number) {
+            toast('Enter an SCP number using up to 7 digits.');
+            return;
+          }
+
+          const title = form.elements.title.value.trim().slice(0, 100);
+          const className = form.elements.className.value;
+          const description = form.elements.description.value.trim();
+          const containment = form.elements.containment.value.trim();
+          if (!title || !className || !description || !containment) {
+            toast('Number, title, class, description, and containment are required.');
+            return;
+          }
+
+          try {
+            const taken = await stores.catalog.command('GET', numberKey(number));
+            if (taken) {
+              setNumberStatus(`${number} is closed. Pick another SCP number.`, 'closed');
+              toast(`${number} is closed. Please repick.`);
+              return;
+            }
+
+            const subEntries = await collectSubEntries(form, number);
+            if (!subEntries) return;
+            const imageUrl = await getImageFromForm(form.elements.imageFile, form.elements.imageUrl.value.trim());
+            if (imageUrl === null) return;
+
+            const id = makeId('submission');
+            const submission = {
+              id,
+              key: submissionKey(id),
+              number,
+              title,
+              className,
+              imageUrl,
+              description,
+              containment,
+              subEntries,
+              submittedBy: state.user.username,
+              submittedByTitle: state.user.title || 'None',
+              submittedByDisplay: state.user.displayName || formatAccountName(state.user),
+              createdAt: Date.now(),
+              status: 'pending',
+            };
+
+            await stores.submissions.pipeline([
+              ['SET', submission.key, JSON.stringify(submission)],
+              ['SADD', KEYS.submissionIndex, submission.key],
+            ]);
+
+            form.reset();
+            $('#subScpList').innerHTML = '';
+            $('#scpClass').value = '';
+            setNumberStatus('', '');
+            renderClassOptions();
+            toast('Submission saved for review.');
+            refreshMyWork();
+          } catch (error) {
+            toast(`Submission failed: ${error.message}`);
+          }
+        });
+      }
+      async function refreshCatalog() {
+        const grid = $("#catalogGrid");
+        if (grid) grid.innerHTML = `<p class="empty-state">Loading catalog...</p>`;
+
+        try {
+          state.catalog = await loadCatalogEntries();
+          renderCatalog();
+          updateCatalogStats();
+        } catch (error) {
+          if (grid) grid.innerHTML = `<p class="empty-state">Could not load catalog: ${escapeHTML(error.message)}</p>`;
+        }
+      }
+
+      async function loadCatalogEntries() {
+        const keys = await stores.catalog.command("SMEMBERS", KEYS.catalogIndex);
+        const entries = await loadJSONList(stores.catalog, keys || []);
+
+        const likeCommands = entries.flatMap((entry) => [
+          ["SCARD", likesKey(entry)],
+          state.user ? ["SISMEMBER", likesKey(entry), state.user.username] : ["EXISTS", "__never__"],
+        ]);
+        const likeResults = likeCommands.length ? await stores.catalog.pipeline(likeCommands) : [];
+
+        return entries.map((entry, index) => ({
+          ...entry,
+          likes: Number(likeResults[index * 2] || 0),
+          likedByMe: Boolean(Number(likeResults[index * 2 + 1] || 0)),
+        }));
+      }
+
+      function renderCatalog() {
+        const grid = $("#catalogGrid");
+        if (!grid) return;
+
+        const search = ($("#catalogSearch")?.value || "").trim().toLowerCase();
+        const classFilter = $("#catalogClass")?.value || "all";
+        const sort = $("#catalogSort")?.value || "newest";
+
+        let entries = state.catalog.filter((entry) => {
+          const matchesClass = classFilter === "all" || entry.className === classFilter;
+          const haystack = `${entry.number} ${entry.title} ${entry.description} ${entry.containment} ${displayAuthor(entry)} ${(entry.subEntries || []).map((sub) => `${sub.number} ${sub.title} ${sub.description}`).join(' ')}`.toLowerCase();
+          return matchesClass && (!search || haystack.includes(search));
+        });
+
+        entries = sortEntries(entries, sort);
+
+        grid.innerHTML = entries.length
+          ? entries.map((entry) => renderScpCard(entry, { showLike: true })).join("")
+          : `<p class="empty-state">No catalog entries match this search yet.</p>`;
+      }
+
+      function sortEntries(entries, sort) {
+        return [...entries].sort((a, b) => {
+          if (sort === "likes") return (b.likes || 0) - (a.likes || 0);
+          if (sort === "number") return a.number.localeCompare(b.number, undefined, { numeric: true });
+          if (sort === "class") return a.className.localeCompare(b.className);
+          return (b.acceptedAt || b.createdAt || 0) - (a.acceptedAt || a.createdAt || 0);
+        });
+      }
+
+      function renderScpCard(entry, options = {}) {
+        const image = entry.imageUrl || classInfo(entry.className).asset;
+        const author = displayAuthor(entry);
+        const subEntries = Array.isArray(entry.subEntries) ? entry.subEntries : [];
+        return `
+          <article class="scp-card">
+            <div class="scp-card-header">
+              <div>
+                <div class="scp-number">${escapeHTML(entry.number)}</div>
+                <h3>${escapeHTML(entry.title)}</h3>
+              </div>
+              ${classBadge(entry.className)}
+            </div>
+            <img class="scp-image" src="${escapeAttr(image)}" alt="${escapeAttr(entry.title)}">
+            <p>${escapeHTML(clampText(entry.description, 280))}</p>
+            <div class="card-meta">
+              <span class="pill">By ${escapeHTML(author)}</span>
+              <span class="pill">${formatDate(entry.acceptedAt || entry.createdAt)}</span>
+              <span class="pill">${Number(entry.likes || 0)} likes</span>
+            </div>
+            <details>
+              <summary>Containment procedures</summary>
+              <p>${escapeHTML(entry.containment || 'No procedures supplied.')}</p>
+            </details>
+            ${subEntries.length ? `
+              <details class="scp-subentries">
+                <summary>See sub SCPs (${subEntries.length})</summary>
+                <div class="sub-scp-catalog">
+                  ${subEntries.map((sub) => renderSubScpCard(sub)).join('')}
+                </div>
+              </details>
+            ` : ''}
+            ${options.showLike ? `
+              <div class="card-actions">
+                <button class="button small ${entry.likedByMe ? 'success' : ''}" data-like="${escapeAttr(entry.id)}">
+                  ${entry.likedByMe ? 'Liked' : 'Like'} (${Number(entry.likes || 0)})
+                </button>
+              </div>
+            ` : ''}
+          </article>
+        `;
+      }
+
+      function renderSubScpCard(sub) {
+        const image = sub.imageUrl || classInfo(sub.className).asset;
+        return `
+          <article class="sub-scp-card">
+            <div class="scp-card-header">
+              <div>
+                <div class="scp-number">${escapeHTML(sub.number || sub.suffix || 'SUB')}</div>
+                <h4>${escapeHTML(sub.title || 'Untitled sub-SCP')}</h4>
+              </div>
+              ${classBadge(sub.className || 'Safe')}
+            </div>
+            <img class="scp-image" src="${escapeAttr(image)}" alt="${escapeAttr(sub.title || 'sub SCP')}">
+            <p>${escapeHTML(sub.description || '')}</p>
+            <details>
+              <summary>Containment procedures</summary>
+              <p>${escapeHTML(sub.containment || 'No procedures supplied.')}</p>
+            </details>
+          </article>
+        `;
+      }
+      async function likeEntry(id) {
+        if (!state.user) {
+          toast("Log in first so each person can only like once.");
+          return;
+        }
+
+        const entry = state.catalog.find((item) => item.id === id);
+        if (!entry) return;
+
+        try {
+          const alreadyLiked = await stores.catalog.command("SISMEMBER", likesKey(entry), state.user.username);
+          if (Number(alreadyLiked)) {
+            toast("You already liked this SCP.");
+            return;
+          }
+
+          await stores.catalog.command("SADD", likesKey(entry), state.user.username);
+          toast(`Liked ${entry.number}.`);
+          await refreshCatalog();
+        } catch (error) {
+          toast(`Like failed: ${error.message}`);
+        }
+      }
+
+      async function refreshMyWork() {
+        const panel = $('#myWorkPanel');
+        const submissionsPanel = $('#mySubmissionsPanel');
+        const acceptedPanel = $('#myAcceptedPanel');
+        if (!panel && !submissionsPanel && !acceptedPanel) return;
+
+        if (!state.user) {
+          const message = `<p class="empty-state">Log in to see your pending submissions and accepted SCP files.</p>`;
+          if (panel) panel.innerHTML = message;
+          if (submissionsPanel) submissionsPanel.innerHTML = message;
+          if (acceptedPanel) acceptedPanel.innerHTML = message;
+          return;
+        }
+
+        const loading = `<p class="empty-state">Loading your files...</p>`;
+        if (panel) panel.innerHTML = loading;
+        if (submissionsPanel) submissionsPanel.innerHTML = loading;
+        if (acceptedPanel) acceptedPanel.innerHTML = loading;
+
+        try {
+          const [submissions, catalog] = await Promise.all([loadSubmissions(), loadCatalogEntries()]);
+          const mine = submissions.filter((item) => item.submittedBy === state.user.username);
+          const accepted = catalog.filter((item) => item.submittedBy === state.user.username || item.author === state.user.username);
+          const submissionsHtml = mine.length ? mine.map((item) => renderSubmissionCard(item)).join('') : `<p class="empty-state">No pending submissions.</p>`;
+          const acceptedHtml = accepted.length ? accepted.map((item) => renderMiniEntry(item)).join('') : `<p class="empty-state">None accepted yet.</p>`;
+
+          if (submissionsPanel && acceptedPanel) {
+            submissionsPanel.innerHTML = `<div class="submission-grid">${submissionsHtml}</div>`;
+            acceptedPanel.innerHTML = `<div class="mini-grid">${acceptedHtml}</div>`;
+            return;
+          }
+
+          if (panel) {
+            panel.innerHTML = `
+              <div class="split-layout">
+                <section>
+                  <h3>Pending submissions</h3>
+                  <div class="submission-grid">${submissionsHtml}</div>
+                </section>
+                <section>
+                  <h3>Accepted into catalog</h3>
+                  <div class="mini-grid">${acceptedHtml}</div>
+                </section>
+              </div>
+            `;
+          }
+        } catch (error) {
+          const message = `<p class="empty-state">Could not load your work: ${escapeHTML(error.message)}</p>`;
+          if (panel) panel.innerHTML = message;
+          if (submissionsPanel) submissionsPanel.innerHTML = message;
+          if (acceptedPanel) acceptedPanel.innerHTML = message;
+        }
+      }
+      function renderSubmissionCard(item) {
+        const subEntries = Array.isArray(item.subEntries) ? item.subEntries : [];
+        return `
+          <article class="scp-card">
+            <div class="scp-card-header">
+              <div>
+                <div class="scp-number">${escapeHTML(item.number)}</div>
+                <h3>${escapeHTML(item.title)}</h3>
+              </div>
+              ${classBadge(item.className)}
+            </div>
+            <p>${escapeHTML(clampText(item.description, 220))}</p>
+            <div class="card-meta">
+              <span class="pill">By ${escapeHTML(displayAuthor(item))}</span>
+              <span class="pill">Pending review</span>
+              <span class="pill">${formatDate(item.createdAt)}</span>
+              ${subEntries.length ? `<span class="pill">${subEntries.length} sub SCPs</span>` : ''}
+            </div>
+            ${subEntries.length ? `<details class="scp-subentries"><summary>See sub SCPs</summary><div class="sub-scp-catalog">${subEntries.map((sub) => renderSubScpCard(sub)).join('')}</div></details>` : ''}
+          </article>
+        `;
+      }
+      function renderMiniEntry(item) {
+        const subCount = Array.isArray(item.subEntries) ? item.subEntries.length : 0;
+        return `
+          <article class="mini-card">
+            <h4>${escapeHTML(item.number)}: ${escapeHTML(item.title)}</h4>
+            <p>${escapeHTML(item.className)} class - ${Number(item.likes || 0)} likes - By ${escapeHTML(displayAuthor(item))}${subCount ? ` - ${subCount} sub SCPs` : ''}</p>
+          </article>
+        `;
+      }
+      async function refreshPortal() {
+        const mount = $("#portalMount");
+        if (!mount) return;
+        mount.innerHTML = `<p class="empty-state">Loading catalog...</p>`;
+
+        try {
+          const html = await stores.catalog.command("GET", KEYS.portalHtml);
+          if (html) {
+            if (/<!doctype|<html[\s>]/i.test(html)) {
+              document.open();
+              document.write(html);
+              document.close();
+              return;
+            }
+            mount.innerHTML = `<div class="database-html">${html}</div>`;
+            return;
+          }
+
+          const entries = await loadCatalogEntries();
+          mount.innerHTML = buildPortalHtml(entries);
+        } catch (error) {
+          mount.innerHTML = `<p class="empty-state">Catalog failed to load: ${escapeHTML(error.message)}</p>`;
+        }
+      }
+
+      function buildPortalHtml(entries) {
+        const sorted = sortEntries(entries, "number");
+        return `
+          <section class="catalog-intro panel">
+            <div>
+              <span class="eyebrow">Catalog</span>
+              <h2 class="robot-title">SCP Catalog</h2>
+              <p>Browse accepted SCP files, search the archive, and review Foundation records.</p>
+            </div>
+            <div class="catalog-status">
+              <span class="pill"><strong>${sorted.length}</strong>&nbsp;files</span>
+              <span class="pill"><strong>${sorted.reduce((sum, entry) => sum + Number(entry.likes || 0), 0)}</strong>&nbsp;likes</span>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="catalog-panel-head">
+              <div>
+                <h2>Catalog</h2>
+                <p>Accepted SCP records appear here after review.</p>
+              </div>
+            </div>
+            <div class="catalog-grid">
+              ${sorted.length ? sorted.map((entry) => renderScpCard(entry, { preview: true })).join("") : `<p class="empty-state">No SCP files have been accepted yet.</p>`}
+            </div>
+          </section>
+        `;
+      }
+
+      function updateAuthViews() {
+        state.user = readSession();
+        $$('[data-auth-user]').forEach((node) => {
+          node.textContent = state.user ? (state.user.displayName || formatAccountName(state.user)) : 'Guest';
+        });
+        $$('[data-logged-in]').forEach((node) => node.classList.toggle('hidden', !state.user));
+        $$('[data-logged-out]').forEach((node) => node.classList.toggle('hidden', Boolean(state.user)));
+        $$('[data-requires-auth]').forEach((node) => node.classList.toggle('hidden', !state.user));
+        if (state.user) closeLoginPanel();
+
+        const activePanel = $('[data-tab-panel].active');
+        if (!state.user && activePanel?.matches('[data-requires-auth]')) {
+          activateMainTab('catalog');
+        }
+      }
+      function updateCatalogStats() {
+        $("#catalogCount") && ($("#catalogCount").textContent = String(state.catalog.length));
+        $("#catalogLikes") && ($("#catalogLikes").textContent = String(state.catalog.reduce((sum, item) => sum + Number(item.likes || 0), 0)));
+      }
+
+      function updateAdminStats() {
+        $("#pendingCount") && ($("#pendingCount").textContent = String(state.submissions.length));
+        $("#acceptedCount") && ($("#acceptedCount").textContent = String(state.catalog.length));
+      }
+
+      async function loadJSONList(store, keys) {
+        if (!keys.length) return [];
+        const values = await store.pipeline(keys.map((key) => ["GET", key]));
+        return values
+          .map((value) => safeJSON(value))
+          .filter(Boolean);
+      }
+
+      async function getJSON(store, key) {
+        const value = await store.command("GET", key);
+        return safeJSON(value);
+      }
+
+      function safeJSON(value) {
+        if (!value) return null;
+        try {
+          return typeof value === "string" ? JSON.parse(value) : value;
+        } catch {
+          return null;
+        }
+      }
+
+      function normalizeUsername(value) {
+        return String(value || '').toLowerCase().replace(/[^a-z]/g, '').slice(0, 20);
+      }
+
+      function isValidUsername(value) {
+        return /^[a-z]{1,20}$/.test(value);
+      }
+
+      function formatAccountName(account) {
+        const username = account?.username || 'unknown';
+        const title = account?.title || 'None';
+        return title && title !== 'None' ? `${title} ${username}` : username;
+      }
+
+      function sessionFromAccount(account) {
+        return {
+          username: account.username,
+          title: account.title || 'None',
+          displayName: account.displayName || formatAccountName(account),
+        };
+      }
+
+      function displayAuthor(entry) {
+        return entry?.submittedByDisplay || entry?.authorDisplay || entry?.displayName || formatAccountName({ username: entry?.submittedBy || entry?.author || 'Unknown', title: entry?.submittedByTitle || entry?.authorTitle || 'None' });
+      }
+
+      function normalizeScpNumber(value) {
+        const digits = String(value || '').replace(/^SCP[-\s]*/i, '').replace(/\D/g, '').slice(0, 7);
+        if (!digits) return '';
+        return `SCP-${digits.padStart(3, '0')}`;
+      }
+
+      async function checkMainNumberAvailability() {
+        const input = $('#scpNumber');
+        if (!input) return;
+        const number = normalizeScpNumber(input.value);
+        if (!number) {
+          setNumberStatus('', '');
+          return;
+        }
+        try {
+          const taken = await stores.catalog.command('GET', numberKey(number));
+          if (taken) setNumberStatus(`${number} is closed. Pick another number.`, 'closed');
+          else setNumberStatus(`${number} is open for submission.`, 'open');
+        } catch {
+          setNumberStatus('', '');
+        }
+      }
+
+      function setNumberStatus(message, type) {
+        const node = $('#scpNumberStatus');
+        if (!node) return;
+        node.textContent = message;
+        node.className = `status-message ${type || ''}`;
+      }
+
+      function usedSubLetters() {
+        return $$('[data-sub-letter]').map((select) => select.value).filter(Boolean);
+      }
+
+      function addSubScpForm() {
+        const list = $('#subScpList');
+        if (!list) return;
+        const count = $$('[data-sub-scp-card]', list).length;
+        if (count >= 26) {
+          toast('You can only add up to 26 sub SCPs.');
+          return;
+        }
+        const used = new Set(usedSubLetters());
+        const next = SUB_SUFFIXES.find((letter) => !used.has(letter)) || 'A';
+        const uid = makeId('sub');
+        const card = document.createElement('article');
+        card.className = 'sub-scp-card';
+        card.dataset.subScpCard = uid;
+        card.innerHTML = renderSubScpForm(uid, next);
+        list.appendChild(card);
+        renderClassOptions();
+      }
+
+      function renderSubScpForm(uid, selectedLetter) {
+        const options = SUB_SUFFIXES.map((letter) => `<option value="${letter}" ${letter === selectedLetter ? 'selected' : ''}>${letter}</option>`).join('');
+        return `
+          <div class="scp-card-header">
+            <h3>Sub SCP</h3>
+            <button class="button small danger" type="button" data-remove-sub>Remove</button>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="${uid}-letter">Sub letter</label>
+              <select id="${uid}-letter" data-sub-letter>${options}</select>
+            </div>
+            <div class="field">
+              <label for="${uid}-title">Title</label>
+              <input id="${uid}-title" data-sub-title maxlength="100" placeholder="Sub anomaly title" required>
+            </div>
+            <div class="field full">
+              <label>Object class</label>
+              <input id="${uid}-class" data-sub-class type="hidden" value="" required>
+              <div class="class-logo-picker" data-class-picker-for="${uid}-class"></div>
+            </div>
+            <div class="field">
+              <label for="${uid}-image-url">Image URL</label>
+              <input id="${uid}-image-url" data-sub-image-url placeholder="https://example.com/sub.png">
+            </div>
+            <div class="field">
+              <label for="${uid}-image-file">Upload image</label>
+              <input id="${uid}-image-file" data-sub-image-file type="file" accept="image/*">
+            </div>
+            <div class="field full">
+              <label for="${uid}-description">Description</label>
+              <textarea id="${uid}-description" data-sub-description required></textarea>
+            </div>
+            <div class="field full">
+              <label for="${uid}-containment">Containment procedures</label>
+              <textarea id="${uid}-containment" data-sub-containment required></textarea>
+            </div>
+          </div>
+        `;
+      }
+
+      async function collectSubEntries(form, mainNumber) {
+        const cards = $$('[data-sub-scp-card]');
+        const seen = new Set();
+        const entries = [];
+        for (const card of cards) {
+          const suffix = $('[data-sub-letter]', card).value;
+          if (seen.has(suffix)) {
+            toast(`Sub SCP ${suffix} is already used. Pick a different letter.`);
+            return null;
+          }
+          seen.add(suffix);
+          const title = $('[data-sub-title]', card).value.trim().slice(0, 100);
+          const className = $('[data-sub-class]', card).value;
+          const description = $('[data-sub-description]', card).value.trim();
+          const containment = $('[data-sub-containment]', card).value.trim();
+          if (!title || !className || !description || !containment) {
+            toast('Every sub SCP needs a title, class, description, and containment.');
+            return null;
+          }
+          const imageUrl = await getImageFromForm($('[data-sub-image-file]', card), $('[data-sub-image-url]', card).value.trim());
+          if (imageUrl === null) return null;
+          entries.push({
+            suffix,
+            number: `${mainNumber}-${suffix}`,
+            title,
+            className,
+            imageUrl,
+            description,
+            containment,
+          });
+        }
+        return entries;
+      }
+
+      function getImageFromForm(fileInput, fallbackUrl) {
+        const file = fileInput?.files?.[0];
+        if (!file) return Promise.resolve(fallbackUrl || '');
+        if (!file.type.startsWith('image/')) {
+          toast('Only image files can be uploaded.');
+          return Promise.resolve(null);
+        }
+        if (file.size > 1600000) {
+          toast('Image upload is too large. Use an image under 1.6 MB.');
+          return Promise.resolve(null);
+        }
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => {
+            toast('Could not read that image file.');
+            resolve(null);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function makeId(prefix) {
+        return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+      }
+
+      function catalogKey(id) {
+        return `scp:catalog:${id}`;
+      }
+
+      function submissionKey(id) {
+        return `scp:submission:${id}`;
+      }
+
+      function userKey(username) {
+        return `scp:account:${username}`;
+      }
+
+      function numberKey(number) {
+        return `scp:number:${number}`;
+      }
+
+      function likesKey(entry) {
+        return `scp:likes:${entry.id}`;
+      }
+
+      function readSession() {
+        return safeJSON(localStorage.getItem("scpCatalogUser"));
+      }
+
+      function writeSession(user) {
+        localStorage.setItem("scpCatalogUser", JSON.stringify(user));
+        state.user = user;
+      }
+
+      async function hashPassword(username, password) {
+        const raw = `${username}:${password}`;
+        if (window.crypto?.subtle) {
+          const data = new TextEncoder().encode(raw);
+          const hash = await crypto.subtle.digest("SHA-256", data);
+          return Array.from(new Uint8Array(hash)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
+        }
+        return btoa(unescape(encodeURIComponent(raw)));
+      }
+
+      function formatDate(value) {
+        if (!value) return "Unknown date";
+        return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" }).format(new Date(value));
+      }
+
+      function clampText(value, limit) {
+        const text = String(value || "");
+        return text.length > limit ? `${text.slice(0, limit - 1)}...` : text;
+      }
+
+      function escapeHTML(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function escapeAttr(value) {
+        return escapeHTML(value).replaceAll("`", "&#096;");
+      }
+
+      function toast(message) {
+        let node = $("#toast");
+        if (!node) {
+          node = document.createElement("div");
+          node.id = "toast";
+          node.className = "toast";
+          document.body.appendChild(node);
+        }
+
+        node.textContent = message;
+        node.classList.add("show");
+        clearTimeout(toast.timer);
+        toast.timer = setTimeout(() => node.classList.remove("show"), 3600);
+      }
+    </script>
+  </body>
+</html>
